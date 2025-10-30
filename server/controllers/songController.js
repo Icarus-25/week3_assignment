@@ -3,18 +3,20 @@
  * Handles HTTP requests for Song resources
  */
 
-const Song = require('../models/Song');
+const db = require('../models');
+const Song = db.Song;
 
 /**
  * List all songs
  * @param {Object} req - Express request object
  * @param {Object} res - Express response object
  */
-function ListSongs(req, res) {
+async function ListSongs(req, res) {
     try {
-        const songs = Song.List();
+        const songs = await Song.findAll();
         res.json(songs);
     } catch (error) {
+        console.error(error);
         res.status(500).json({ error: 'Failed to retrieve songs' });
     }
 }
@@ -24,10 +26,10 @@ function ListSongs(req, res) {
  * @param {Object} req - Express request object
  * @param {Object} res - Express response object
  */
-function GetSong(req, res) {
+async function GetSong(req, res) {
     try {
         const songId = req.params.id;
-        const song = Song.GetById(songId);
+        const song = await Song.findByPk(songId);
 
         if (!song) {
             return res.status(404).json({ error: 'Song not found' });
@@ -35,6 +37,7 @@ function GetSong(req, res) {
 
         res.json(song);
     } catch (error) {
+        console.error(error);
         res.status(400).json({ error: error.message });
     }
 }
@@ -44,19 +47,23 @@ function GetSong(req, res) {
  * @param {Object} req - Express request object
  * @param {Object} res - Express response object
  */
-function CreateSong(req, res) {
+async function CreateSong(req, res) {
     try {
-        // Log incoming request for debugging
         console.log('CreateSong called with body:', req.body);
 
-        // Validate request body
         if (!req.body || !req.body.title) {
             return res.status(400).json({ error: 'Title is required' });
         }
 
-        const song = Song.Create(req.body);
+        const song = await Song.create({
+            title: req.body.title.trim(),
+            artist: req.body.artist ? req.body.artist.trim() : null,
+            yearReleased: req.body.yearReleased ? parseInt(req.body.yearReleased, 10) : null
+        });
+
         res.status(201).json(song);
     } catch (error) {
+        console.error(error);
         res.status(400).json({ error: error.message });
     }
 }

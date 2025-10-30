@@ -4,13 +4,23 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "migrate": "npx sequelize-cli db:migrate --config server/config/config.json --migrations-path server/migrations --models-path server/models",
+    "migrate:undo": "npx sequelize-cli db:migrate:undo --config server/config/config.json --migrations-path server/migrations --models-path server/models"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "cors": "^2.8.5",
-    "express": "^5.1.0"
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
+    "pg": "^8.16.3",
+    "pg-hstore": "^2.3.4",
+    "sequelize": "^6.37.7"
+  }
+  ,
+  "devDependencies": {
+    "sequelize-cli": "^6.6.0"
   }
 }

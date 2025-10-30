@@ -6,6 +6,7 @@
 // Import dependencies
 const express = require('express');
 const cors = require('cors');
+require('dotenv').config();
 
 // Constants
 const _port = 5000;
@@ -54,4 +55,13 @@ app.get('/health', (req, res) => {
 // Start the server
 app.listen(_port, () => {
     console.log(`Server running on port ${_port}`);
+    // Try to connect to the database if DATABASE_URL is provided
+    if (process.env.DATABASE_URL) {
+        const db = require('./models');
+        db.sequelize.authenticate()
+            .then(() => console.log('Database connection established.'))
+            .catch((err) => console.error('Unable to connect to the database:', err.message || err));
+    } else {
+        console.log('DATABASE_URL not set — skipping DB connection attempt.');
+    }
 });

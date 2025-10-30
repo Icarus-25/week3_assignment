@@ -3,18 +3,20 @@
  * Handles HTTP requests for Movie resources
  */
 
-const Movie = require('../models/Movie');
+const db = require('../models');
+const Movie = db.Movie;
 
 /**
  * List all movies
  * @param {Object} req - Express request object
  * @param {Object} res - Express response object
  */
-function ListMovies(req, res) {
+async function ListMovies(req, res) {
     try {
-        const movies = Movie.List();
+        const movies = await Movie.findAll();
         res.json(movies);
     } catch (error) {
+        console.error(error);
         res.status(500).json({ error: 'Failed to retrieve movies' });
     }
 }
@@ -24,10 +26,10 @@ function ListMovies(req, res) {
  * @param {Object} req - Express request object
  * @param {Object} res - Express response object
  */
-function GetMovie(req, res) {
+async function GetMovie(req, res) {
     try {
         const movieId = req.params.id;
-        const movie = Movie.GetById(movieId);
+        const movie = await Movie.findByPk(movieId);
 
         if (!movie) {
             return res.status(404).json({ error: 'Movie not found' });
@@ -35,6 +37,7 @@ function GetMovie(req, res) {
 
         res.json(movie);
     } catch (error) {
+        console.error(error);
         res.status(400).json({ error: error.message });
     }
 }
@@ -44,19 +47,23 @@ function GetMovie(req, res) {
  * @param {Object} req - Express request object
  * @param {Object} res - Express response object
  */
-function CreateMovie(req, res) {
+async function CreateMovie(req, res) {
     try {
-        // Log incoming request for debugging
         console.log('CreateMovie called with body:', req.body);
 
-        // Validate request body
         if (!req.body || !req.body.title) {
             return res.status(400).json({ error: 'Title is required' });
         }
 
-        const movie = Movie.Create(req.body);
+        const movie = await Movie.create({
+            title: req.body.title.trim(),
+            director: req.body.director ? req.body.director.trim() : null,
+            yearReleased: req.body.yearReleased ? parseInt(req.body.yearReleased, 10) : null
+        });
+
         res.status(201).json(movie);
     } catch (error) {
+        console.error(error);
         res.status(400).json({ error: error.message });
     }
 }

@@ -18,7 +18,7 @@ function SongList() {
             setIsLoading(true);
             setError(null);
 
-            const response = await axios.get('http://localhost:5000/api/songs');
+            const response = await axios.get('/api/songs');
             setSongs(response.data);
         } catch (err) {
             console.error('Error fetching songs:', err);

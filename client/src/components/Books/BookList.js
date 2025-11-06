@@ -20,7 +20,7 @@ function BookList() {
             setIsLoading(true);
             setError(null);
 
-            const response = await axios.get('http://localhost:5000/api/books');
+            const response = await axios.get('/api/books');
             setBooks(response.data);
         } catch (error) {
             console.error('Error fetching books:', error);

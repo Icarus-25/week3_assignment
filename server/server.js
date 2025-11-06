@@ -51,7 +51,14 @@ app.get('/health', (req, res) => {
         timestamp: new Date().toISOString()
     });
 });
+// Serve React static files
+const path = require('path');
+app.use(express.static(path.join(__dirname, '../client/build')));
 
+// Handle all other routes by sending index.html (for React Router)
+app.use((req, res) => {
+    res.sendFile(path.join(__dirname, '../client/build', 'index.html'));
+});
 // Start the server
 app.listen(_port, () => {
     console.log(`Server running on port ${_port}`);

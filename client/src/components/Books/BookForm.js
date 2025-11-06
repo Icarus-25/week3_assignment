@@ -47,7 +47,7 @@ function BookForm({ onCreated }) {
         setIsSubmitting(true);
 
         try {
-            const response = await axios.post('http://localhost:5000/api/books', {
+            const response = await axios.post('/api/books', {
                 title: formData.title.trim(),
                 author: formData.author.trim(),
                 yearPublished: formData.yearPublished ? parseInt(formData.yearPublished, 10) : null

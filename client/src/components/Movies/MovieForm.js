@@ -48,7 +48,7 @@ function MovieForm({ onCreated }) {
         yearReleased: formData.yearReleased ? parseInt(formData.yearReleased, 10) : null
       };
 
-      const response = await axios.post('http://localhost:5000/api/movies', payload);
+      const response = await axios.post('/api/movies', payload);
 
       ResetForm();
 

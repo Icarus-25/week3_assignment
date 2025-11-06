@@ -18,7 +18,7 @@ function MovieList() {
             setIsLoading(true);
             setError(null);
 
-            const response = await axios.get('http://localhost:5000/api/movies');
+            const response = await axios.get('/api/movies');
             setMovies(response.data);
         } catch (err) {
             console.error('Error fetching movies:', err);

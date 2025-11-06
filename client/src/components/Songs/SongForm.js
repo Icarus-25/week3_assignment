@@ -41,7 +41,7 @@ function SongForm({ onCreated }) {
         yearReleased: formData.yearReleased ? parseInt(formData.yearReleased, 10) : null
       };
 
-      const response = await axios.post('http://localhost:5000/api/songs', payload);
+      const response = await axios.post('/api/songs', payload);
 
       ResetForm();
 
